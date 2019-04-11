@@ -5,96 +5,289 @@ from app2menu import App2Menu
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QVBoxLayout,\
 				QDialog,QStackedWidget,QGridLayout,QTabWidget,QHBoxLayout,QFormLayout,QLineEdit,QComboBox,\
 				QStatusBar,QFileDialog,QDialogButtonBox,QScrollBar,QScrollArea,QCheckBox,QTableWidget,\
-				QTableWidgetItem,QHeaderView,QTableWidgetSelectionRange
+				QTableWidgetItem,QHeaderView,QTableWidgetSelectionRange,QListWidget
 from PyQt5 import QtGui
 from PyQt5.QtCore import QSize,pyqtSlot,Qt, QPropertyAnimation,QThread,QRect,QTimer,pyqtSignal,QSignalMapper
 import gettext
+gettext.textdomain('deskedit')
+_ = gettext.gettext
+
+RSRC="/usr/share/deskedit/rsrc"
+RSRC="/home/lliurex/git/desktop-editor/rsrc"
+
+class th_getCategories(QThread):
+	signal=pyqtSignal("PyQt_PyObject")
+	def __init__(self):
+		QThread.__init__(self)
+
+	def __del__(self):
+		self.wait()
+
+	def run(self):
+		menu=App2Menu.app2menu()
+		categories=menu.get_categories()
+		self.signal.emit(categories)
 
 class desktopEditor(QWidget):
 
-	def __init__(self):
+	def __init__(self,desktop_file=None):
 		super().__init__()
-		self.dbg=False
-		self.desktop={'icon':'x-appimage','name':'','comment':'','categories':'Utility'}
-#		self._render_gui(desktop)
-
-	def _read_desktop_file(self,desktop_file):
-		menu=App2Menu.app2menu()
-		self.desktop=menu.get_desktop_info(desktop_file)
-
-	#def _set_desktop_info
+		self.dbg=True
+		self._debug("Rendering gui...")
+		self.categories=[]
+		self.icon='exe'
+		desktop=self._read_desktop_file(desktop_file)
+		box=QGridLayout()
+		img_banner=QLabel()
+		img=QtGui.QPixmap("%s/deskedit_banner.png"%RSRC)
+		img_banner.setPixmap(img)
+		box.addWidget(img_banner,0,0,1,1)
+		box.addWidget(self._render_gui(desktop),1,0,1,1)
+		self.setStyleSheet(self._set_css())
+		self.setLayout(box)
+		self.show()
+	#def __init__
 	
-	def _dbg(self,msg):
+	def _debug(self,msg):
 		if self.dbg:
 			print("DeskEdit: %s"%msg)
+	#def _debug
+	
+	def _read_desktop_file(self,desktop_file=None):
+		menu=App2Menu.app2menu()
+		if desktop_file:
+			desktop=menu.get_desktop_info(desktop_file)
+		else:
+			desktop=menu.init_desktop_file()
+		return(desktop)
+	#def _read_desktop_file
 
-	def _render_gui(self):
-		box=QGridLayout()
-		categories=[]
+	def _file_chooser(self,widget=None,path=None,imgDialog=None):
 		fdia=QFileDialog()
-		icon="x-appimage"
-		def _file_chooser():
-			fdia.setFileMode(QFileDialog.AnyFile)
+		fchoosed=''
+		fdia.setFileMode(QFileDialog.AnyFile)
+		if imgDialog:
 			fdia.setNameFilter(_("images(*.png *.xpm *jpg)"))
-			if (fdia.exec_()):
-				icon=fdia.selectedFiles()[0]
-				icn=QtGui.QIcon(icon)
-				btn_icon.setIcon(icn)
+		else:
+			fdia.setNameFilter(_("All files(*.*)"))
+		if path:
+			self._debug("Set path to %s"%path)
+			fdia.setDirectory(path)
+		if (fdia.exec_()):
+			fchoosed=fdia.selectedFiles()[0]
+			if widget:
+				if imgDialog:
+					self.icon=fdia.selectedFiles()[0]
+					icn=QtGui.QIcon(self.icon)
+					widget.setIcon(icn)
+				else:
+					widget.setText(fchoosed)
+			return(fchoosed)
 
-		def _begin_save_desktop():
-			name=inp_name.text()
-			comment=inp_desc.text()
-			categories=cmb_cat.currentText()
-			desktop['name']=name
-			if fdia.selectedFiles():
-				icon=fdia.selectedFiles()[0]
-			else:
-				icon='x-appimage'
-			desktop['icon']=icon
-			desktop['comment']=comment
-			desktop['categories']=categories
-#			dia.accept()
-			
-		def _set_categories(categories):
-			filter_categories=['debian','help']
-			for cat in categories:
-				if cat and cat not in filter_categories:
-					cmb_cat.addItem(_(cat))
-			cmb_cat.adjustSize()
-		dia=QDialog()
-		dia.setWindowTitle("Appimage Desktop Definition")
-		box=QFormLayout()
-		lbl_icon=QLabel(_("Select icon: "))
-		inp_icon=QLineEdit(desktop['icon'])
-		btn_icon=QPushButton()
-		icn_desktop=QtGui.QIcon.fromTheme(icon)
-		btn_icon.setIcon(icn_desktop)
-		btn_icon.setIconSize(QSize(64,64))
-		btn_icon.clicked.connect(_file_chooser)
-		box.addRow(lbl_icon,btn_icon)
-		lbl_name=QLabel(_("Set name: "))
-		inp_name=QLineEdit(desktop['name'])
-		box.addRow(lbl_name,inp_name)
-		lbl_desc=QLabel(_("Set desc: "))
-		inp_desc=QLineEdit(desktop['comment'])
-		box.addRow(lbl_desc,inp_desc)
-		lbl_cat=QLabel(_("Set category: "))
-		cmb_cat=QComboBox()
-		cmb_cat.setSizeAdjustPolicy(0)
+	def _render_gui(self,desktop):
+		categories=[]
+		gui=QWidget()
+		gui.setWindowTitle("Appimage Desktop Definition")
+		box=QHBoxLayout()
+		self.btn_categories={}
+		gridBox=QGridLayout()
+		self.gridBtnBox=QTableWidget(5,3)
+		self.gridBtnBox.horizontalHeader().hide()
+		self.gridBtnBox.verticalHeader().hide()
+		self.gridBtnBox.setShowGrid(False)
+		self.gridBtnBox.setEditTriggers(QTableWidget.NoEditTriggers)
+		box.addLayout(gridBox)
+		lbl_icon=QLabel(_("Icon: "))
+		gridBox.addWidget(lbl_icon,1,2,1,1)
+		self.btn_icon=QPushButton()
+		self.btn_icon.setObjectName("btnIcon")
+		icn_desktop=QtGui.QIcon.fromTheme(self.icon)
+		self.btn_icon.setIcon(icn_desktop)
+		self.btn_icon.setIconSize(QSize(64,64))
+		self.btn_icon.clicked.connect(lambda:self._file_chooser(widget=self.btn_icon,imgDialog=True))
+		gridBox.addWidget(self.btn_icon,2,2,3,1)
+		lbl_name=QLabel(_("Name: "))
+		gridBox.addWidget(lbl_name,1,0,1,2)
+		self.inp_name=QLineEdit(desktop['Name'])
+		self.inp_name.setPlaceholderText(_("Desktop name"))
+		gridBox.addWidget(self.inp_name,2,0,1,2)
+		lbl_exec=QLabel(_("Executable: "))
+		gridBox.addWidget(lbl_exec,3,0,1,2)
+		self.inp_exec=QLineEdit(desktop['Exec'])
+		self.inp_exec.setPlaceholderText(_("Executable path"))
+		gridBox.addWidget(self.inp_exec,4,0,1,1,Qt.Alignment(0))
+		btn_exec=QPushButton("...")
+		btn_exec.setObjectName("btnFile")
+		btn_exec.clicked.connect(lambda:self._file_chooser(widget=self.inp_exec))
+		gridBox.addWidget(btn_exec,4,1,1,1,Qt.Alignment(1))
+		lbl_desc=QLabel(_("Description: "))
+		gridBox.addWidget(lbl_desc,5,0,1,2)
+		self.inp_desc=QLineEdit(desktop['Comment'])
+		self.inp_desc.setPlaceholderText(_("Description"))
+		gridBox.addWidget(self.inp_desc,6,0,1,2)
+		lbl_cat=QLabel(_("Categories: "))
+		gridBox.addWidget(lbl_cat,7,0,1,2)
+		gridBox.addWidget(self.gridBtnBox,8,0,1,3)
 		th_categories=th_getCategories()
 		th_categories.start()
-		th_categories.signal.connect(_set_categories)
-		box.addRow(lbl_cat,cmb_cat)
-		btnBox=QDialogButtonBox(QDialogButtonBox.Ok|QDialogButtonBox.Cancel)
-		btnBox.rejected.connect(dia.reject)
-		btnBox.accepted.connect(_begin_save_desktop)
-#		box.addRow(btn_apply,btn_cancel)
-		box.addRow(btnBox)
-		dia.setLayout(box)
-#		dia.show()
-#		result=dia.exec_()
-#		return (desktop,result==QDialog.Accepted)
-	#def _render_desktop_dialog
+		th_categories.signal.connect(self._set_categories)
+		btn_load=QPushButton(_("Load"))
+		btn_load.clicked.connect(self._load_desktop)
+		gridBox.addWidget(btn_load,9,0,1,1,Qt.Alignment(1))
+		btn_cancel=QPushButton(_("Cancel"))
+		btn_cancel.clicked.connect(self._clear_screen)
+		gridBox.addWidget(btn_cancel,9,1,1,1,Qt.Alignment(0))
+		btn_apply=QPushButton(_("Save"))
+		btn_apply.setIconSize(QSize(48,48))
+		btn_apply.clicked.connect(self._save_desktop)
+		gridBox.addWidget(btn_apply,9,2,1,1,Qt.Alignment(2))
+		gui.setLayout(box)
+		return(gui)
+	#def _render_gui
+
+	def _clear_screen(self):
+		self.inp_name.setText("")
+		self.inp_exec.setText("")
+		self.inp_desc.setText("")
+		self.gridBtnBox.clear()
+		self.gridBtnBox.setRowCount(5)
+		self.btn_categories={}
+		self._set_categories()
+		self.icon='exe'
+		icn=QtGui.QIcon.fromTheme(self.icon)
+		self.btn_icon.setIcon(icn)
+	#def _clear_screen
+
+	def _set_categories(self,loaded_categories=None):
+		if not self.categories:
+			self.categories=loaded_categories
+		filter_categories=['debian','help','toys','kidsgames','action','control center','data management',\
+						'file transfer','information','internet','communication','shells','translation',\
+						'universal access','monitoring','package management','system','settingsmenu','screensavers',\
+						'puzzles','lliurex preferences','look and feel','miscellaneous','preferences','network','audio',\
+						'video','other','sound','administration','accessories','hardware','utilities','viewers',\
+						'programming','applications','development','author tools','desktop','editors','graphics',\
+						'chemistry','electronics','mathematics','science','lliurex administration']
+		row=0
+		col=0
+		items_per_row=3
+		self.categories.sort()
+		for cat in self.categories:
+			if cat and cat not in filter_categories:
+				btn=QPushButton(cat)
+				btn.setObjectName("btnCategory")
+				btn.setCheckable(True)
+				self.btn_categories[cat]=btn
+				self.gridBtnBox.setCellWidget(row,col,btn)
+				col+=1
+				if not col%items_per_row:
+					row+=1
+					col=0
+		self.gridBtnBox.resizeColumnsToContents()
+		print("Grid Loaded")
+	#def _set_categories
+		
+	def _load_desktop(self):
+		fdesktop=self._file_chooser(path="/usr/share/applications")
+		menu=App2Menu.app2menu()
+		desktop=menu.get_desktop_info(fdesktop)
+		if desktop:
+			if desktop['NoDisplay']:
+				_show_error()
+			else:
+				self.btn_categories={}
+				self._clear_screen()
+				self.inp_name.setText(desktop['Name'])
+				self.inp_exec.setText(desktop['Exec'])
+				self.inp_desc.setText(desktop['Comment'])
+				sw_cat=False
+				for cat in desktop['Categories']:
+					if cat.lower() in self.btn_categories.keys():
+						sw_cat=True
+						self.btn_categories[cat.lower()].setChecked(True)
+				if not sw_cat:
+					lastCat=desktop['Categories'][-1]
+					btn=QPushButton(lastCat.lower())
+					btn.setObjectName("btnCategory")
+					self.btn_categories[lastCat.lower()]=btn
+					row=self.gridBtnBox.rowCount()
+					self.gridBtnBox.insertRow(row)
+					self.gridBtnBox.setCellWidget(row,0,btn)
+					btn.setCheckable(True)
+					btn.setChecked(True)
+				if os.path.isfile(desktop['Icon']):
+					icn=QtGui.QIcon(icon)
+					pass
+				else:
+					icn=QtGui.QIcon.fromTheme(desktop['Icon'])
+				self.btn_icon.setIcon(icn)
+	#def _load_desktop
+		
+	def _save_desktop(self):
+		categories=[]
+		desktop={}
+		for btnText,btn in self.btn_categories.items():
+			if btn.isChecked():
+				categories.append(btn.text())
+		desktop['Name']=self.inp_name.text()
+		desktop['Exec']=self.inp_exec.text()
+		desktop['Icon']=self.icon
+		desktop['Comment']=self.inp_desc.text()
+		desktop['Categories']=';'.join(categories)
+		self.debug("Saving %s"%desktop)
+		subprocess.check_call(["pkexec","/usr/share/deskedit/bin/deskedit-helper.py",desktop['Name'],desktop['Icon'],desktop['Comment'],desktop['Categories'],desktop['Exec'])
+	#def _save_desktop
+
+	def _set_css(self):
+			css="""
+	
+			#btnCategory{
+				color:grey;
+				border-width:3px;
+				background:white;
+				border-style:groove;
+				padding:3px;
+			}
+
+			#btnCategory:checked{
+				color:black;
+				font-style:bold;
+				background:silver;
+				border-style:ridge;
+				border-color:grey;
+			}
+
+			#btnIcon{
+				border:0px;
+				margin:0px;
+				padding:0px;
+			}
+
+			#btnFile{
+				padding:3px;
+				padding-left:6px;
+				padding-right:6px;
+			}
+
+			QLabel{
+				font:12px Roboto;
+				margin:0px;
+				border:0px;
+				padding:3px;
+			}
+
+			QLineEdit{
+				border:0px;
+				border-bottom:1px solid grey;
+				padding:1px;
+				font:14px Roboto;
+				margin-right:6px;
+			}
+
+			
+			"""
+			return(css)
+
 
 
 app=QApplication([])
