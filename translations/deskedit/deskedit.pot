@@ -1,0 +1,70 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-11 12:33+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/deskedit.py:70
+msgid "images(*.png *.xpm *jpg)"
+msgstr ""
+
+#: ../src/deskedit.py:72
+msgid "All files(*.*)"
+msgstr ""
+
+#: ../src/deskedit.py:100
+msgid "Icon: "
+msgstr ""
+
+#: ../src/deskedit.py:109
+msgid "Name: "
+msgstr ""
+
+#: ../src/deskedit.py:112
+msgid "Desktop name"
+msgstr ""
+
+#: ../src/deskedit.py:114
+msgid "Executable: "
+msgstr ""
+
+#: ../src/deskedit.py:117
+msgid "Executable path"
+msgstr ""
+
+#: ../src/deskedit.py:123
+msgid "Description: "
+msgstr ""
+
+#: ../src/deskedit.py:126
+msgid "Description"
+msgstr ""
+
+#: ../src/deskedit.py:128
+msgid "Categories: "
+msgstr ""
+
+#: ../src/deskedit.py:134
+msgid "Load"
+msgstr ""
+
+#: ../src/deskedit.py:137
+msgid "Cancel"
+msgstr ""
+
+#: ../src/deskedit.py:140
+msgid "Save"
+msgstr ""
