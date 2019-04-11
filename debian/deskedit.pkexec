@@ -1,0 +1,26 @@
+[
+    {
+        "cmd": "/usr/share/deskedit/bin/deskeditr.py",
+        "prefix": "net.lliurex.deskedit-helper",
+        "nameaction": "deskedit-helper",
+        "icon": "deskedit",
+        "auths": [
+            {
+                "type": "group",
+                "members": [
+                    "teachers",
+                    "sudo"
+                ],
+                "any": "no",
+                "inactive": "no",
+                "active": "auth_self"
+            }
+        ],
+        "default_auth": {
+            "any": "no",
+            "inactive": "no",
+            "active": "no"
+        },
+        "requiredx": "false"
+    }
+]
