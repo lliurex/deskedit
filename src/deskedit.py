@@ -39,7 +39,7 @@ class desktopEditor(QWidget):
 		self.icon='exe'
 		self.height=0
 		desktop=self._read_desktop_file(desktop_file)
-		box=QVBoxLayout()
+		box=QGridLayout()
 		self.statusBar=QStatusBar()
 		self.anim=QPropertyAnimation(self.statusBar, b"geometry")
 		self.statusBar.hide()
@@ -49,8 +49,8 @@ class desktopEditor(QWidget):
 		img_banner=QLabel()
 		img=QtGui.QPixmap("%s/deskedit_banner.png"%RSRC)
 		img_banner.setPixmap(img)
-		box.addWidget(img_banner)
-		box.addWidget(self._render_gui(desktop))
+		box.addWidget(img_banner,0,0,1,1)
+		box.addWidget(self._render_gui(desktop),1,0,1,1)
 		self.setStyleSheet(self._set_css())
 		self.setLayout(box)
 		self.show()
@@ -245,12 +245,12 @@ class desktopEditor(QWidget):
 		self._debug("Saving %s"%desktop)
 		try:
 			subprocess.check_call(["pkexec","/usr/share/deskedit/bin/deskedit-helper.py",desktop['Name'],desktop['Icon'],desktop['Comment'],desktop['Categories'],desktop['Exec']])
-			self._show_message(_("Added %s"%desktop['Name']),"background:blue")
+			self._show_message(_("Added %s"%desktop['Name']),True)
 		except:
 			self._show_message(_("Error adding %s"%desktop['Name']))
 	#def _save_desktop
 	
-	def _show_message(self,msg,css=None):
+	def _show_message(self,msg,success=None):
 		def hide_message():
 			timer=1000
 			self.anim.setDuration(timer)
@@ -258,10 +258,11 @@ class desktopEditor(QWidget):
 			self.anim.setEndValue(QRect(0,0,self.width()-10,0))
 			self.anim.start()
 			self.timer.singleShot(timer, lambda:self.statusBar.hide())
-		if css:
-				self.statusBar.setStyleSheet("""QStatusBar{color:white;%s;}"""%css)
+		if success:
+				self.statusBar.setStyleSheet("""QStatusBar{background-color:qlineargradient(x1:0 y1:0,x2:0 y2:1,stop:0 rgba(0,0,255,1), stop:1 rgba(0,0,255,0.6));color:white;font-style:bold;}""")
 		else:
-				self.statusBar.setStyleSheet("""QStatusBar{background:red;color:white;}""")
+				self.statusBar.setStyleSheet("""QStatusBar{background-color:qlineargradient(x1:0 y1:0,x2:0 y2:1,stop:0 rgba(255,0,0,1), stop:1 rgba(255,0,0,0.6));color:white;text-decoration:underline;text-shadow: 3px 2px black;vertical-align:text-top;font-weight:bold;}""")
+		self.statusBar.raise_()
 		self.statusBar.showMessage("%s"%msg)
 		self.anim.setDuration(1000)
 		self.anim.setLoopCount(1)
