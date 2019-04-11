@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=DeskEdit
+GenericName=DeskEdit
+Comment=Edit or create desktop files
+Comment[es]=Edita o crea fitxers desktop
+Comment[ca_ES@valencia]=Edita o crea fitxers desktop
+Comment[ca_ES.UTF-8@valencia]=Edita o crea fitxers desktop
+Comment[ca]=Edita o crea fitxers desktop
+Exec=deskedit
+Terminal=false
+Type=Application
+Icon=deskedit
+Name[ca_ES.UTF-8@valencia]=DeskEdit
+Name[ca_ES@valencia]=DeskEdit
+Name[ca]=DeskEdit
+Name[es]=DeskEdit
+Categories=KDE;QT;Utilities;LliureX-Utilities;
+TryExec=/usr/bin/deskedit
