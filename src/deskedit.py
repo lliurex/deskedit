@@ -37,13 +37,20 @@ class desktopEditor(QWidget):
 		self._debug("Rendering gui...")
 		self.categories=[]
 		self.icon='exe'
+		self.height=0
 		desktop=self._read_desktop_file(desktop_file)
-		box=QGridLayout()
+		box=QVBoxLayout()
+		self.statusBar=QStatusBar()
+		self.anim=QPropertyAnimation(self.statusBar, b"geometry")
+		self.statusBar.hide()
+		self.timer=QTimer()
+		self.timer.setSingleShot(True)
+		box.addWidget(self.statusBar)
 		img_banner=QLabel()
 		img=QtGui.QPixmap("%s/deskedit_banner.png"%RSRC)
 		img_banner.setPixmap(img)
-		box.addWidget(img_banner,0,0,1,1)
-		box.addWidget(self._render_gui(desktop),1,0,1,1)
+		box.addWidget(img_banner)
+		box.addWidget(self._render_gui(desktop))
 		self.setStyleSheet(self._set_css())
 		self.setLayout(box)
 		self.show()
@@ -194,7 +201,7 @@ class desktopEditor(QWidget):
 		desktop=menu.get_desktop_info(fdesktop)
 		if desktop:
 			if desktop['NoDisplay']:
-				_show_error()
+				self._show_message(_("Desktops with NoDisplay couldn't be loaded"))
 			else:
 				self.btn_categories={}
 				self._clear_screen()
@@ -236,8 +243,36 @@ class desktopEditor(QWidget):
 		desktop['Comment']=self.inp_desc.text()
 		desktop['Categories']=';'.join(categories)
 		self._debug("Saving %s"%desktop)
-		subprocess.check_call(["pkexec","/usr/share/deskedit/bin/deskedit-helper.py",desktop['Name'],desktop['Icon'],desktop['Comment'],desktop['Categories'],desktop['Exec']])
+		try:
+			subprocess.check_call(["pkexec","/usr/share/deskedit/bin/deskedit-helper.py",desktop['Name'],desktop['Icon'],desktop['Comment'],desktop['Categories'],desktop['Exec']])
+			self._show_message(_("Added %s"%desktop['Name']),"background:blue")
+		except:
+			self._show_message(_("Error adding %s"%desktop['Name']))
 	#def _save_desktop
+	
+	def _show_message(self,msg,css=None):
+		def hide_message():
+			timer=1000
+			self.anim.setDuration(timer)
+			self.anim.setStartValue(QRect(0,0,self.width()-10,self.height-10))
+			self.anim.setEndValue(QRect(0,0,self.width()-10,0))
+			self.anim.start()
+			self.timer.singleShot(timer, lambda:self.statusBar.hide())
+		if css:
+				self.statusBar.setStyleSheet("""QStatusBar{color:white;%s;}"""%css)
+		else:
+				self.statusBar.setStyleSheet("""QStatusBar{background:red;color:white;}""")
+		self.statusBar.showMessage("%s"%msg)
+		self.anim.setDuration(1000)
+		self.anim.setLoopCount(1)
+		height=self.statusBar.height()/10
+		if self.height<height:
+			self.height=height
+		self.statusBar.show()
+		self.anim.setStartValue(QRect(0,0,self.width()-10,0))
+		self.anim.setEndValue(QRect(0,0,self.width()-10,self.height-10))
+		self.anim.start()
+		self.timer.singleShot(3000, lambda:hide_message())
 
 	def _set_css(self):
 			css="""
