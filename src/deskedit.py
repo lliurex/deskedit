@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QVBoxLayo
 from PyQt5 import QtGui
 from PyQt5.QtCore import QSize,pyqtSlot,Qt, QPropertyAnimation,QThread,QRect,QTimer,pyqtSignal,QSignalMapper
 import gettext
+import subprocess
 gettext.textdomain('deskedit')
 _ = gettext.gettext
 
@@ -234,8 +235,8 @@ class desktopEditor(QWidget):
 		desktop['Icon']=self.icon
 		desktop['Comment']=self.inp_desc.text()
 		desktop['Categories']=';'.join(categories)
-		self.debug("Saving %s"%desktop)
-		subprocess.check_call(["pkexec","/usr/share/deskedit/bin/deskedit-helper.py",desktop['Name'],desktop['Icon'],desktop['Comment'],desktop['Categories'],desktop['Exec'])
+		self._debug("Saving %s"%desktop)
+		subprocess.check_call(["pkexec","/usr/share/deskedit/bin/deskedit-helper.py",desktop['Name'],desktop['Icon'],desktop['Comment'],desktop['Categories'],desktop['Exec']])
 	#def _save_desktop
 
 	def _set_css(self):
