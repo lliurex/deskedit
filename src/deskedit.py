@@ -111,27 +111,32 @@ class desktopEditor(QWidget):
 		icn_desktop=QtGui.QIcon.fromTheme(self.icon)
 		self.btn_icon.setIcon(icn_desktop)
 		self.btn_icon.setIconSize(QSize(64,64))
+		self.btn_icon.setToolTip(_("Push to change icon"))
 		self.btn_icon.clicked.connect(lambda:self._file_chooser(widget=self.btn_icon,imgDialog=True))
 		gridBox.addWidget(self.btn_icon,2,2,3,1)
 		lbl_name=QLabel(_("Name: "))
 		gridBox.addWidget(lbl_name,1,0,1,2)
 		self.inp_name=QLineEdit(desktop['Name'])
 		self.inp_name.setPlaceholderText(_("Desktop name"))
+		self.inp_name.setToolTip(_("Insert desktop name"))
 		gridBox.addWidget(self.inp_name,2,0,1,2)
 		lbl_exec=QLabel(_("Executable: "))
 		gridBox.addWidget(lbl_exec,3,0,1,2)
 		self.inp_exec=QLineEdit(desktop['Exec'])
 		self.inp_exec.setPlaceholderText(_("Executable path"))
+		self.inp_exec.setToolTip(_("Insert path to the executable"))
 		gridBox.addWidget(self.inp_exec,4,0,1,1,Qt.Alignment(0))
 		btn_exec=QPushButton("...")
 		btn_exec.setObjectName("btnFile")
+		btn_exec.setToolTip(_("Press button to select an executable"))
 		btn_exec.clicked.connect(lambda:self._file_chooser(widget=self.inp_exec))
 		gridBox.addWidget(btn_exec,4,1,1,1,Qt.Alignment(1))
 		lbl_desc=QLabel(_("Description: "))
 		gridBox.addWidget(lbl_desc,5,0,1,2)
 		self.inp_desc=QLineEdit(desktop['Comment'])
 		self.inp_desc.setPlaceholderText(_("Description"))
-		gridBox.addWidget(self.inp_desc,6,0,1,2)
+		self.inp_desc.setToolTip(_("Insert a description for the app"))
+		gridBox.addWidget(self.inp_desc,6,0,1,3)
 		lbl_cat=QLabel(_("Categories: "))
 		gridBox.addWidget(lbl_cat,7,0,1,2)
 		gridBox.addWidget(self.gridBtnBox,8,0,1,3)
@@ -307,12 +312,15 @@ class desktopEditor(QWidget):
 				margin-right:6px;
 			}
 
+			QTableWidget{
+				background:rgba(255,255,255,0);
+			}
 			
 			"""
 			return(css)
 
 
 
-app=QApplication([])
+app=QApplication(["DeskEdit"])
 editor=desktopEditor()
 app.exec_()
