@@ -51,7 +51,6 @@ class desktopEditor(QWidget):
 		box.addWidget(self._render_gui(desktop),1,0,1,1)
 		self.setStyleSheet(self._set_css())
 		self.setLayout(box)
-		print("W: %s"%self.width())
 		self.show()
 	#def __init__
 	
@@ -144,12 +143,15 @@ class desktopEditor(QWidget):
 		th_categories.start()
 		th_categories.signal.connect(self._set_categories)
 		btn_load=QPushButton(_("Load"))
+		btn_load.setTooltipText(_("Load a desktop file from system"))
 		btn_load.clicked.connect(self._load_desktop)
 		gridBox.addWidget(btn_load,9,0,1,1,Qt.Alignment(1))
 		btn_cancel=QPushButton(_("Cancel"))
+		btn_load.setTooltipText(_("Cancel current edit"))
 		btn_cancel.clicked.connect(self._clear_screen)
 		gridBox.addWidget(btn_cancel,9,1,1,1,Qt.Alignment(0))
 		btn_apply=QPushButton(_("Save"))
+		btn_load.setTooltipText(_("Save desktop"))
 		btn_apply.setIconSize(QSize(48,48))
 		btn_apply.clicked.connect(self._save_desktop)
 		gridBox.addWidget(btn_apply,9,2,1,1,Qt.Alignment(2))
@@ -196,7 +198,6 @@ class desktopEditor(QWidget):
 					row+=1
 					col=0
 		self.gridBtnBox.resizeColumnsToContents()
-		print("Grid Loaded")
 	#def _set_categories
 		
 	def _load_desktop(self):
