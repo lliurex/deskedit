@@ -39,6 +39,7 @@ class desktopEditor(QWidget):
 		self._debug("Rendering gui...")
 		self.categories=[]
 		self.icon='exe'
+		self.filename=''
 		desktop=self._read_desktop_file(desktop_file)
 		box=QGridLayout()
 		self.statusBar=QAnimatedStatusBar.QAnimatedStatusBar()
@@ -143,15 +144,15 @@ class desktopEditor(QWidget):
 		th_categories.start()
 		th_categories.signal.connect(self._set_categories)
 		btn_load=QPushButton(_("Load"))
-		btn_load.setTooltipText(_("Load a desktop file from system"))
+		btn_load.setToolTip(_("Load a desktop file from system"))
 		btn_load.clicked.connect(self._load_desktop)
 		gridBox.addWidget(btn_load,9,0,1,1,Qt.Alignment(1))
 		btn_cancel=QPushButton(_("Cancel"))
-		btn_load.setTooltipText(_("Cancel current edit"))
+		btn_cancel.setToolTip(_("Cancel current edit"))
 		btn_cancel.clicked.connect(self._clear_screen)
 		gridBox.addWidget(btn_cancel,9,1,1,1,Qt.Alignment(0))
 		btn_apply=QPushButton(_("Save"))
-		btn_load.setTooltipText(_("Save desktop"))
+		btn_apply.setToolTip(_("Save desktop"))
 		btn_apply.setIconSize(QSize(48,48))
 		btn_apply.clicked.connect(self._save_desktop)
 		gridBox.addWidget(btn_apply,9,2,1,1,Qt.Alignment(2))
@@ -170,6 +171,7 @@ class desktopEditor(QWidget):
 		self.icon='exe'
 		icn=QtGui.QIcon.fromTheme(self.icon)
 		self.btn_icon.setIcon(icn)
+		self.filename=''
 	#def _clear_screen
 
 	def _set_categories(self,loaded_categories=None):
@@ -203,13 +205,15 @@ class desktopEditor(QWidget):
 	def _load_desktop(self):
 		fdesktop=self._file_chooser(path="/usr/share/applications")
 		menu=App2Menu.app2menu()
-		desktop=menu.get_desktop_info(fdesktop)
+		desktop={}
+		if fdesktop:
+			desktop=menu.get_desktop_info(fdesktop)
 		if desktop:
 			if desktop['NoDisplay']:
 				self._show_message(_("Desktops with NoDisplay couldn't be loaded"))
 			else:
-				self.btn_categories={}
 				self._clear_screen()
+				self.filename=fdesktop
 				self.inp_name.setText(desktop['Name'])
 				self.inp_exec.setText(desktop['Exec'])
 				self.inp_desc.setText(desktop['Comment'])
@@ -228,6 +232,7 @@ class desktopEditor(QWidget):
 					self.gridBtnBox.setCellWidget(row,0,btn)
 					btn.setCheckable(True)
 					btn.setChecked(True)
+				self.icon=desktop['Icon']
 				if os.path.isfile(desktop['Icon']):
 					icn=QtGui.QIcon(icon)
 					pass
@@ -241,15 +246,16 @@ class desktopEditor(QWidget):
 		desktop={}
 		for btnText,btn in self.btn_categories.items():
 			if btn.isChecked():
-				categories.append(btn.text())
+				categories.append(btn.text().capitalize())
 		desktop['Name']=self.inp_name.text()
 		desktop['Exec']=self.inp_exec.text()
 		desktop['Icon']=self.icon
 		desktop['Comment']=self.inp_desc.text()
 		desktop['Categories']=';'.join(categories)
 		self._debug("Saving %s"%desktop)
+		self._debug("filename %s"%self.filename)
 		try:
-			subprocess.check_call(["pkexec","/usr/share/deskedit/bin/deskedit-helper.py",desktop['Name'],desktop['Icon'],desktop['Comment'],desktop['Categories'],desktop['Exec']])
+			subprocess.check_call(["pkexec","/usr/share/deskedit/bin/deskedit-helper.py",desktop['Name'],desktop['Icon'],desktop['Comment'],desktop['Categories'],desktop['Exec'],self.filename])
 			self._show_message(_("Added %s"%desktop['Name']),"success")
 		except:
 			self._show_message(_("Error adding %s"%desktop['Name']))

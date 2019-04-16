@@ -9,4 +9,6 @@ desktop_icon=sys.argv[2]
 desktop_comment=sys.argv[3]
 desktop_categories=sys.argv[4]
 desktop_exe=sys.argv[5]
-menu.set_desktop_info(desktop_name,desktop_icon,desktop_comment,desktop_categories,desktop_exe)
+filename=sys.argv[6]
+
+menu.set_desktop_info(desktop_name,desktop_icon,desktop_comment,desktop_categories,desktop_exe,False,filename)
