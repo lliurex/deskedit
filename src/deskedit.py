@@ -38,7 +38,8 @@ class desktopEditor(QWidget):
 		self.dbg=True
 		self._debug("Rendering gui...")
 		self.categories=[]
-		self.icon='exe'
+		self.categories_translator={}
+		self.icon='%s/exec.png'%RSRC
 		self.filename=''
 		desktop=self._read_desktop_file(desktop_file)
 		box=QGridLayout()
@@ -168,7 +169,7 @@ class desktopEditor(QWidget):
 		self.gridBtnBox.setRowCount(5)
 		self.btn_categories={}
 		self._set_categories()
-		self.icon='exe'
+		self.icon='%s/exec.png'%RSRC
 		icn=QtGui.QIcon.fromTheme(self.icon)
 		self.btn_icon.setIcon(icn)
 		self.filename=''
@@ -188,6 +189,9 @@ class desktopEditor(QWidget):
 		col=0
 		items_per_row=3
 		self.categories.sort()
+		self.categories_translator['multimedia']="AudioVideo;Graphics"
+		self.categories_translator['games']="Game"
+		self.categories_translator['internet and network']="Internet"
 		for cat in self.categories:
 			if cat and cat not in filter_categories:
 				btn=QPushButton(cat)
@@ -234,7 +238,7 @@ class desktopEditor(QWidget):
 					btn.setChecked(True)
 				self.icon=desktop['Icon']
 				if os.path.isfile(desktop['Icon']):
-					icn=QtGui.QIcon(icon)
+					icn=QtGui.QIcon(desktop['Icon'])
 					pass
 				else:
 					icn=QtGui.QIcon.fromTheme(desktop['Icon'])
@@ -251,7 +255,13 @@ class desktopEditor(QWidget):
 		desktop['Exec']=self.inp_exec.text()
 		desktop['Icon']=self.icon
 		desktop['Comment']=self.inp_desc.text()
-		desktop['Categories']=';'.join(categories)
+		tmp_cat=[]
+		for cat in categories:
+			if cat.lower() in self.categories_translator.keys():
+				tmp_cat.append(self.categories_translator[cat.lower()])
+			else:
+				tmp_cat.append(cat)
+		desktop['Categories']=';'.join(tmp_cat)
 		self._debug("Saving %s"%desktop)
 		self._debug("filename %s"%self.filename)
 		try:
