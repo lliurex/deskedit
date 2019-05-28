@@ -1,3 +1,9 @@
+deskedit (0.3.1) bionic; urgency=medium
+
+  * Disable debug messages
+
+ -- Juanma Navarro Mañez <juanma1980@gmail.com>  Tue, 28 May 2019 16:57:29 +0200
+
 deskedit (0.3) bionic; urgency=medium
 
   * Fix load desktop
