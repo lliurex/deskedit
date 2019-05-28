@@ -15,7 +15,6 @@ _ = gettext.gettext
 from edupals.ui import QAnimatedStatusBar
 
 RSRC="/usr/share/deskedit/rsrc"
-RSRC="/home/lliurex/git/desktop-editor/rsrc"
 
 class th_getCategories(QThread):
 	signal=pyqtSignal("PyQt_PyObject")
@@ -35,7 +34,7 @@ class desktopEditor(QWidget):
 	def __init__(self,desktop_file=None):
 		super().__init__()
 		self.setObjectName("mainWindow")
-		self.dbg=True
+		self.dbg=False
 		self._debug("Rendering gui...")
 		self.categories=[]
 		self.categories_translator={}
