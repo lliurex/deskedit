@@ -5,7 +5,7 @@ from app2menu import App2Menu
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QVBoxLayout,\
 				QDialog,QStackedWidget,QGridLayout,QTabWidget,QHBoxLayout,QFormLayout,QLineEdit,QComboBox,\
 				QStatusBar,QFileDialog,QDialogButtonBox,QScrollBar,QScrollArea,QCheckBox,QTableWidget,\
-				QTableWidgetItem,QHeaderView,QTableWidgetSelectionRange,QListWidget
+				QTableWidgetItem,QHeaderView,QTableWidgetSelectionRange,QListWidget,QToolBar,QToolButton
 from PyQt5 import QtGui
 from PyQt5.QtCore import QSize,pyqtSlot,Qt, QPropertyAnimation,QThread,QRect,pyqtSignal,QSignalMapper
 import gettext
@@ -104,6 +104,14 @@ class desktopEditor(QWidget):
 		self.gridBtnBox.setShowGrid(False)
 		self.gridBtnBox.setEditTriggers(QTableWidget.NoEditTriggers)
 		box.addLayout(gridBox)
+		tlb_controls=QToolBar()
+		gridBox.addWidget(tlb_controls,0,0,1,3)
+		icn_new=QtGui.QIcon.fromTheme("list-add")
+		tlb_controls.addAction(icn_new,"Load",self._clear_screen)
+		icn_load=QtGui.QIcon.fromTheme("document-open")
+		tlb_controls.addAction(icn_load,"Load",self._load_desktop)
+
+
 		lbl_icon=QLabel(_("Icon: "))
 		gridBox.addWidget(lbl_icon,1,2,1,1)
 		self.btn_icon=QPushButton()
@@ -143,14 +151,14 @@ class desktopEditor(QWidget):
 		th_categories=th_getCategories()
 		th_categories.start()
 		th_categories.signal.connect(self._set_categories)
-		btn_load=QPushButton(_("Load"))
-		btn_load.setToolTip(_("Load a desktop file from system"))
-		btn_load.clicked.connect(self._load_desktop)
-		gridBox.addWidget(btn_load,9,0,1,1,Qt.Alignment(1))
-		btn_cancel=QPushButton(_("Cancel"))
-		btn_cancel.setToolTip(_("Cancel current edit"))
-		btn_cancel.clicked.connect(self._clear_screen)
-		gridBox.addWidget(btn_cancel,9,1,1,1,Qt.Alignment(0))
+#		btn_load=QPushButton(_("Load"))
+#		btn_load.setToolTip(_("Load a desktop file from system"))
+#		btn_load.clicked.connect(self._load_desktop)
+#		gridBox.addWidget(btn_load,9,0,1,1,Qt.Alignment(1))
+#		btn_cancel=QPushButton(_("Cancel"))
+#		btn_cancel.setToolTip(_("Cancel current edit"))
+#		btn_cancel.clicked.connect(self._clear_screen)
+#		gridBox.addWidget(btn_cancel,9,1,1,1,Qt.Alignment(0))
 		btn_apply=QPushButton(_("Save"))
 		btn_apply.setToolTip(_("Save desktop"))
 		btn_apply.setIconSize(QSize(48,48))
@@ -302,7 +310,7 @@ class desktopEditor(QWidget):
 			}
 
 			#btnIcon{
-				border:0px;
+				border:1px solid silver;
 				margin:0px;
 				padding:0px;
 			}
