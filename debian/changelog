@@ -1,3 +1,9 @@
+deskedit (0.3.2) bionic; urgency=medium
+
+  * Fixed valencian translations
+
+ -- Juanma Navarro Mañez <juanma1980@gmail.com>  Thu, 06 Jun 2019 10:14:34 +0200
+
 deskedit (0.3.1) bionic; urgency=medium
 
   * Disable debug messages
