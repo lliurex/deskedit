@@ -107,9 +107,9 @@ class desktopEditor(QWidget):
 		tlb_controls=QToolBar()
 		gridBox.addWidget(tlb_controls,0,0,1,3)
 		icn_new=QtGui.QIcon.fromTheme("list-add")
-		tlb_controls.addAction(icn_new,"Load",self._clear_screen)
+		tlb_controls.addAction(icn_new,_("Add a new app launcher"),self._clear_screen)
 		icn_load=QtGui.QIcon.fromTheme("document-open")
-		tlb_controls.addAction(icn_load,"Load",self._load_desktop)
+		tlb_controls.addAction(icn_load,_("Load a desktop file from system"),self._load_desktop)
 
 
 		lbl_icon=QLabel(_("Icon: "))
