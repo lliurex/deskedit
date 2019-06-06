@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-11 12:33+0200\n"
-"PO-Revision-Date: 2019-04-11 12:44+0200\n"
+"PO-Revision-Date: 2019-05-20 09:58+0200\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "Last-Translator: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Language: ca_ES\n"
@@ -24,7 +24,7 @@ msgstr "imatges(*.png *.xpm *jpg)"
 
 #: ../src/deskedit.py:72
 msgid "All files(*.*)"
-msgstr "Tots(*.*)"
+msgstr "Tots els fitxers(*.*)"
 
 #: ../src/deskedit.py:100
 msgid "Icon: "
@@ -36,7 +36,7 @@ msgstr "Nom:"
 
 #: ../src/deskedit.py:112
 msgid "Desktop name"
-msgstr "Nom del desktop"
+msgstr "Nom de l'escriptori "
 
 #: ../src/deskedit.py:114
 msgid "Executable: "
@@ -44,7 +44,7 @@ msgstr "Executable:"
 
 #: ../src/deskedit.py:117
 msgid "Executable path"
-msgstr "Ruta al executable:"
+msgstr "Ruta a l'executable:"
 
 #: ../src/deskedit.py:123
 msgid "Description: "
@@ -60,12 +60,12 @@ msgstr "Categories"
 
 #: ../src/deskedit.py:134
 msgid "Load"
-msgstr "Carregar"
+msgstr "Carrega"
 
 #: ../src/deskedit.py:137
 msgid "Cancel"
-msgstr "Cancel·lar"
+msgstr "Cancel·la"
 
 #: ../src/deskedit.py:140
 msgid "Save"
-msgstr "Alça"
+msgstr "Guarda"
