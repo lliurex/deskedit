@@ -7,65 +7,111 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-11 12:33+0200\n"
-"PO-Revision-Date: 2019-04-11 12:35+0200\n"
+"POT-Creation-Date: 2019-07-03 09:15+0200\n"
+"PO-Revision-Date: 2019-07-03 09:18+0200\n"
+"Last-Translator: \n"
 "Language-Team: \n"
+"Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.6\n"
-"Last-Translator: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: es_ES\n"
 
-#: ../src/deskedit.py:70
+#: ../src/deskedit.py:77
 msgid "images(*.png *.xpm *jpg)"
 msgstr "imágenes(*.png *.xpm *jpg)"
 
-#: ../src/deskedit.py:72
+#: ../src/deskedit.py:79
 msgid "All files(*.*)"
 msgstr "Todos(*.*)"
 
-#: ../src/deskedit.py:100
+#: ../src/deskedit.py:110
+msgid "Add a new app launcher"
+msgstr "Añadir un nuevo lanzador"
+
+#: ../src/deskedit.py:112
+msgid "Load a desktop file from system"
+msgstr "Cargar un lanzador"
+
+#: ../src/deskedit.py:115
 msgid "Icon: "
 msgstr "Icono:"
 
-#: ../src/deskedit.py:109
+#: ../src/deskedit.py:122
+msgid "Push to change icon"
+msgstr "Pulsa para seleccionar icono"
+
+#: ../src/deskedit.py:125
 msgid "Name: "
 msgstr "Nombre:"
 
-#: ../src/deskedit.py:112
+#: ../src/deskedit.py:128
 msgid "Desktop name"
 msgstr "Nombre del desktop"
 
-#: ../src/deskedit.py:114
+#: ../src/deskedit.py:129
+#, fuzzy
+#| msgid "Desktop name"
+msgid "Insert desktop name"
+msgstr "Nombre del desktop"
+
+#: ../src/deskedit.py:131
 msgid "Executable: "
 msgstr "Ejecutable:"
 
-#: ../src/deskedit.py:117
+#: ../src/deskedit.py:134
 msgid "Executable path"
 msgstr "Ruta al ejecutable"
 
-#: ../src/deskedit.py:123
+#: ../src/deskedit.py:135
+msgid "Insert path to the executable"
+msgstr "Ruta al ejecutable"
+
+#: ../src/deskedit.py:139
+msgid "Press button to select an executable"
+msgstr "Pulsa para seleccionar el programa"
+
+#: ../src/deskedit.py:142
 msgid "Description: "
 msgstr "Descripción"
 
-#: ../src/deskedit.py:126
+#: ../src/deskedit.py:145
 msgid "Description"
 msgstr "Descripción"
 
-#: ../src/deskedit.py:128
+#: ../src/deskedit.py:146
+msgid "Insert a description for the app"
+msgstr "Descripción de la aplicación"
+
+#: ../src/deskedit.py:148
 msgid "Categories: "
 msgstr "Categorías:"
 
-#: ../src/deskedit.py:134
-msgid "Load"
-msgstr "Cargar"
-
-#: ../src/deskedit.py:137
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: ../src/deskedit.py:140
+#: ../src/deskedit.py:162
 msgid "Save"
 msgstr "Guardar"
+
+#: ../src/deskedit.py:163
+msgid "Save desktop"
+msgstr "Guardar lanzador"
+
+#: ../src/deskedit.py:224
+msgid "Desktops with NoDisplay couldn't be loaded"
+msgstr "Los lanzadoras con la opción NoDisplay no son válidos"
+
+#: ../src/deskedit.py:276
+#, python-format
+msgid "Added %s"
+msgstr "%s añadido"
+
+#: ../src/deskedit.py:278
+#, python-format
+msgid "Error adding %s"
+msgstr "Error al añadir %s"
+
+#~ msgid "Load"
+#~ msgstr "Cargar"
+
+#~ msgid "Cancel"
+#~ msgstr "Cancelar"
