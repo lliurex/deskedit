@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-11 12:33+0200\n"
+"POT-Creation-Date: 2019-07-03 09:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,54 +17,92 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/deskedit.py:70
+#: ../src/deskedit.py:77
 msgid "images(*.png *.xpm *jpg)"
 msgstr ""
 
-#: ../src/deskedit.py:72
+#: ../src/deskedit.py:79
 msgid "All files(*.*)"
 msgstr ""
 
-#: ../src/deskedit.py:100
-msgid "Icon: "
-msgstr ""
-
-#: ../src/deskedit.py:109
-msgid "Name: "
+#: ../src/deskedit.py:110
+msgid "Add a new app launcher"
 msgstr ""
 
 #: ../src/deskedit.py:112
-msgid "Desktop name"
+msgid "Load a desktop file from system"
 msgstr ""
 
-#: ../src/deskedit.py:114
-msgid "Executable: "
+#: ../src/deskedit.py:115
+msgid "Icon: "
 msgstr ""
 
-#: ../src/deskedit.py:117
-msgid "Executable path"
+#: ../src/deskedit.py:122
+msgid "Push to change icon"
 msgstr ""
 
-#: ../src/deskedit.py:123
-msgid "Description: "
-msgstr ""
-
-#: ../src/deskedit.py:126
-msgid "Description"
+#: ../src/deskedit.py:125
+msgid "Name: "
 msgstr ""
 
 #: ../src/deskedit.py:128
-msgid "Categories: "
+msgid "Desktop name"
+msgstr ""
+
+#: ../src/deskedit.py:129
+msgid "Insert desktop name"
+msgstr ""
+
+#: ../src/deskedit.py:131
+msgid "Executable: "
 msgstr ""
 
 #: ../src/deskedit.py:134
-msgid "Load"
+msgid "Executable path"
 msgstr ""
 
-#: ../src/deskedit.py:137
-msgid "Cancel"
+#: ../src/deskedit.py:135
+msgid "Insert path to the executable"
 msgstr ""
 
-#: ../src/deskedit.py:140
+#: ../src/deskedit.py:139
+msgid "Press button to select an executable"
+msgstr ""
+
+#: ../src/deskedit.py:142
+msgid "Description: "
+msgstr ""
+
+#: ../src/deskedit.py:145
+msgid "Description"
+msgstr ""
+
+#: ../src/deskedit.py:146
+msgid "Insert a description for the app"
+msgstr ""
+
+#: ../src/deskedit.py:148
+msgid "Categories: "
+msgstr ""
+
+#: ../src/deskedit.py:162
 msgid "Save"
+msgstr ""
+
+#: ../src/deskedit.py:163
+msgid "Save desktop"
+msgstr ""
+
+#: ../src/deskedit.py:224
+msgid "Desktops with NoDisplay couldn't be loaded"
+msgstr ""
+
+#: ../src/deskedit.py:276
+#, python-format
+msgid "Added %s"
+msgstr ""
+
+#: ../src/deskedit.py:278
+#, python-format
+msgid "Error adding %s"
 msgstr ""
