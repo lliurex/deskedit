@@ -1,3 +1,9 @@
+deskedit (0.3.3.1) bionic; urgency=medium
+
+  * Update translations
+
+ -- Juanma Navarro Mañez <juanma1980@gmail.com>  Wed, 03 Jul 2019 09:22:50 +0200
+
 deskedit (0.3.3) bionic; urgency=medium
 
   * Improve gui
