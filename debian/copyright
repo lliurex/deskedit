@@ -4,14 +4,13 @@ Upstream-Source: http://lliurex.net/
 
 Files: *
 Copyright: Copyright 2018 Juan Manuel Navarro <juanma1980@gmail.com>
-License: GPL-3+
+License: GPL-3
  
-License: GPL-3+
+License: GPL-3
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 3, or (at your option)
-   any later version.
+   the Free Software Foundation; version 3.
    on any Debian system you can find a copy of the newest GNU GPL at
    '/usr/share/common-licenses/GPL'
 
