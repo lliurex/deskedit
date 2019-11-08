@@ -10,6 +10,6 @@ Homepage: http://lliurex.net
 
 Package: deskedit
 Architecture: all
-Depends: ${python3:Depends}, python3-app2menu, python3-qanimatedstatusbar
+Depends: ${python3:Depends}, python3-app2menu (>=0.9), python3-qanimatedstatusbar
 Description: Desktop Editor
 

@@ -1,3 +1,9 @@
+deskedit (0.4) bionic; urgency=medium
+
+  * Replaced deskedit-helper by app2menu-helper
+
+ -- Juanma1980 <juanma1980@gmail.com>  Fri, 08 Nov 2019 09:03:15 +0100
+
 deskedit (0.3.4) bionic; urgency=medium
 
   * Add call to update-desktop-database
