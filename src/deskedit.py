@@ -272,7 +272,7 @@ class desktopEditor(QWidget):
 		self._debug("Saving %s"%desktop)
 		self._debug("filename %s"%self.filename)
 		try:
-			subprocess.check_call(["pkexec","/usr/share/deskedit/bin/deskedit-helper.py",desktop['Name'],desktop['Icon'],desktop['Comment'],desktop['Categories'],desktop['Exec'],self.filename])
+			subprocess.check_call(["pkexec","/usr/share/app2menu/app2menu-helper.py",desktop['Name'],desktop['Icon'],desktop['Comment'],desktop['Categories'],desktop['Exec'],self.filename])
 			self._show_message(_("Added %s"%desktop['Name']),"success")
 		except:
 			self._show_message(_("Error adding %s"%desktop['Name']))
