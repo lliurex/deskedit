@@ -1,3 +1,9 @@
+deskedit (0.5) focal; urgency=medium
+
+  * First focal release
+
+ -- Juanma1980 <juanma1980@gmail.com>  Tue, 27 Apr 2021 12:17:04 +0200
+
 deskedit (0.4) bionic; urgency=medium
 
   * Replaced deskedit-helper by app2menu-helper
