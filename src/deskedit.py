@@ -2,22 +2,22 @@
 import sys
 import os
 from app2menu import App2Menu
-from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QVBoxLayout,\
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QVBoxLayout,\
 				QDialog,QStackedWidget,QGridLayout,QTabWidget,QHBoxLayout,QFormLayout,QLineEdit,QComboBox,\
 				QStatusBar,QFileDialog,QDialogButtonBox,QScrollBar,QScrollArea,QCheckBox,QTableWidget,\
 				QTableWidgetItem,QHeaderView,QTableWidgetSelectionRange,QListWidget,QToolBar,QToolButton
-from PyQt5 import QtGui
-from PyQt5.QtCore import QSize,pyqtSlot,Qt, QPropertyAnimation,QThread,QRect,pyqtSignal,QSignalMapper
+from PySide2 import QtGui
+from PySide2.QtCore import QSize,Slot,Qt, QPropertyAnimation,QThread,QRect,Signal,QSignalMapper
 import gettext
 import subprocess
 gettext.textdomain('deskedit')
 _ = gettext.gettext
-from edupals.ui import QAnimatedStatusBar
+#from edupals.ui import QAnimatedStatusBar
 
 RSRC="/usr/share/deskedit/rsrc"
 
 class th_getCategories(QThread):
-	signal=pyqtSignal("PyQt_PyObject")
+	signal=Signal("PyObject")
 	def __init__(self):
 		QThread.__init__(self)
 
@@ -42,9 +42,9 @@ class desktopEditor(QWidget):
 		self.filename=''
 		desktop=self._read_desktop_file(desktop_file)
 		box=QGridLayout()
-		self.statusBar=QAnimatedStatusBar.QAnimatedStatusBar()
-		self.statusBar.setStateCss("success","background-color:qlineargradient(x1:0 y1:0,x2:0 y2:1,stop:0 rgba(0,0,255,1), stop:1 rgba(0,0,255,0.6));color:white;")
-		box.addWidget(self.statusBar,0,0,1,1)
+		#self.statusBar=QAnimatedStatusBar.QAnimatedStatusBar()
+		#self.statusBar.setStateCss("success","background-color:qlineargradient(x1:0 y1:0,x2:0 y2:1,stop:0 rgba(0,0,255,1), stop:1 rgba(0,0,255,0.6));color:white;")
+		#box.addWidget(self.statusBar,0,0,1,1)
 		img_banner=QLabel()
 		img=QtGui.QPixmap("%s/deskedit_banner.png"%RSRC)
 		img_banner.setPixmap(img)
@@ -279,11 +279,12 @@ class desktopEditor(QWidget):
 	#def _save_desktop
 
 	def _show_message(self,msg,status=None):
-		self.statusBar.setText(msg)
-		if status:
-			self.statusBar.show(status)
-		else:
-			self.statusBar.show()
+		#self.statusBar.setText(msg)
+		#if status:
+		#	self.statusBar.show(status)
+		#else:
+		#	self.statusBar.show()
+		return
 
 	def _set_css(self):
 			css="""
