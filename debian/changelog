@@ -1,3 +1,9 @@
+deskedit (0.6) focal; urgency=medium
+
+  * Ported to PySide2 
+
+ -- Juanma1980 <juanma1980@gmail.com>  Thu, 06 May 2021 11:47:10 +0200
+
 deskedit (0.5) focal; urgency=medium
 
   * First focal release
