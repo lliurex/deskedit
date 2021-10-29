@@ -21,8 +21,8 @@ class th_getCategories(QThread):
 	def __init__(self):
 		QThread.__init__(self)
 
-	def __del__(self):
-		self.wait()
+	#def __del__(self):
+	#	self.wait()
 
 	def run(self):
 		menu=App2Menu.app2menu()
@@ -148,9 +148,9 @@ class desktopEditor(QWidget):
 		lbl_cat=QLabel(_("Categories: "))
 		gridBox.addWidget(lbl_cat,7,0,1,2)
 		gridBox.addWidget(self.gridBtnBox,8,0,1,3)
-		th_categories=th_getCategories()
-		th_categories.start()
-		th_categories.signal.connect(self._set_categories)
+		self.th_categories=th_getCategories()
+		self.th_categories.signal.connect(self._set_categories)
+		self.th_categories.start()
 #		btn_load=QPushButton(_("Load"))
 #		btn_load.setToolTip(_("Load a desktop file from system"))
 #		btn_load.clicked.connect(self._load_desktop)
