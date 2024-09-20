@@ -2,17 +2,14 @@
 import sys
 import os
 from app2menu import App2Menu
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QVBoxLayout,\
-				QDialog,QStackedWidget,QGridLayout,QTabWidget,QHBoxLayout,QFormLayout,QLineEdit,QComboBox,\
-				QStatusBar,QFileDialog,QDialogButtonBox,QScrollBar,QScrollArea,QCheckBox,QTableWidget,\
-				QTableWidgetItem,QHeaderView,QTableWidgetSelectionRange,QListWidget,QToolBar,QToolButton
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,\
+				QHBoxLayout,QLineEdit,QFileDialog,QTableWidget,QToolBar
 from PySide2 import QtGui
-from PySide2.QtCore import QSize,Slot,Qt, QPropertyAnimation,QThread,QRect,Signal,QSignalMapper
+from PySide2.QtCore import QSize,Qt, QThread,Signal
 import gettext
 import subprocess
 gettext.textdomain('deskedit')
 _ = gettext.gettext
-#from edupals.ui import QAnimatedStatusBar
 
 RSRC="/usr/share/deskedit/rsrc"
 
@@ -40,17 +37,14 @@ class desktopEditor(QWidget):
 		self.categories_translator={}
 		self.icon='%s/exec.png'%RSRC
 		self.filename=''
-		desktop=self._read_desktop_file(desktop_file)
+		desktop=self._readDesktopFile(desktop_file)
 		box=QGridLayout()
-		#self.statusBar=QAnimatedStatusBar.QAnimatedStatusBar()
-		#self.statusBar.setStateCss("success","background-color:qlineargradient(x1:0 y1:0,x2:0 y2:1,stop:0 rgba(0,0,255,1), stop:1 rgba(0,0,255,0.6));color:white;")
-		#box.addWidget(self.statusBar,0,0,1,1)
 		img_banner=QLabel()
 		img=QtGui.QPixmap("%s/deskedit_banner.png"%RSRC)
 		img_banner.setPixmap(img)
 		box.addWidget(img_banner,0,0,1,1)
-		box.addWidget(self._render_gui(desktop),1,0,1,1)
-		self.setStyleSheet(self._set_css())
+		box.addWidget(self._renerGui(desktop),1,0,1,1)
+		self.setStyleSheet(self._setCss())
 		self.setLayout(box)
 		self.show()
 	#def __init__
@@ -60,16 +54,16 @@ class desktopEditor(QWidget):
 			print("DeskEdit: %s"%msg)
 	#def _debug
 	
-	def _read_desktop_file(self,desktop_file=None):
+	def _readDesktopFile(self,desktop_file=None):
 		menu=App2Menu.app2menu()
 		if desktop_file:
 			desktop=menu.get_desktop_info(desktop_file)
 		else:
 			desktop=menu.init_desktop_file()
 		return(desktop)
-	#def _read_desktop_file
+	#def _readDesktopFile
 
-	def _file_chooser(self,widget=None,path=None,imgDialog=None):
+	def _fileChooser(self,widget=None,path=None,imgDialog=None):
 		fdia=QFileDialog()
 		fchoosed=''
 		fdia.setFileMode(QFileDialog.AnyFile)
@@ -91,7 +85,7 @@ class desktopEditor(QWidget):
 					widget.setText(fchoosed)
 			return(fchoosed)
 
-	def _render_gui(self,desktop):
+	def _renerGui(self,desktop):
 		categories=[]
 		gui=QWidget()
 		gui.setWindowTitle("Appimage Desktop Definition")
@@ -107,9 +101,9 @@ class desktopEditor(QWidget):
 		tlb_controls=QToolBar()
 		gridBox.addWidget(tlb_controls,0,0,1,3)
 		icn_new=QtGui.QIcon.fromTheme("list-add")
-		tlb_controls.addAction(icn_new,_("Add a new app launcher"),self._clear_screen)
+		tlb_controls.addAction(icn_new,_("Add a new app launcher"),self._resetScreen)
 		icn_load=QtGui.QIcon.fromTheme("document-open")
-		tlb_controls.addAction(icn_load,_("Load a desktop file from system"),self._load_desktop)
+		tlb_controls.addAction(icn_load,_("Load a desktop file from system"),self._loadDesktopFile)
 
 
 		lbl_icon=QLabel(_("Icon: "))
@@ -120,7 +114,7 @@ class desktopEditor(QWidget):
 		self.btn_icon.setIcon(icn_desktop)
 		self.btn_icon.setIconSize(QSize(64,64))
 		self.btn_icon.setToolTip(_("Push to change icon"))
-		self.btn_icon.clicked.connect(lambda:self._file_chooser(widget=self.btn_icon,imgDialog=True))
+		self.btn_icon.clicked.connect(lambda:self._fileChooser(widget=self.btn_icon,imgDialog=True))
 		gridBox.addWidget(self.btn_icon,2,2,3,1)
 		lbl_name=QLabel(_("Name: "))
 		gridBox.addWidget(lbl_name,1,0,1,2)
@@ -137,7 +131,7 @@ class desktopEditor(QWidget):
 		btn_exec=QPushButton("...")
 		btn_exec.setObjectName("btnFile")
 		btn_exec.setToolTip(_("Press button to select an executable"))
-		btn_exec.clicked.connect(lambda:self._file_chooser(widget=self.inp_exec))
+		btn_exec.clicked.connect(lambda:self._fileChooser(widget=self.inp_exec))
 		gridBox.addWidget(btn_exec,4,1,1,1,Qt.Alignment(1))
 		lbl_desc=QLabel(_("Description: "))
 		gridBox.addWidget(lbl_desc,5,0,1,2)
@@ -149,40 +143,40 @@ class desktopEditor(QWidget):
 		gridBox.addWidget(lbl_cat,7,0,1,2)
 		gridBox.addWidget(self.gridBtnBox,8,0,1,3)
 		self.th_categories=th_getCategories()
-		self.th_categories.signal.connect(self._set_categories)
+		self.th_categories.signal.connect(self.setCategories)
 		self.th_categories.start()
 #		btn_load=QPushButton(_("Load"))
 #		btn_load.setToolTip(_("Load a desktop file from system"))
-#		btn_load.clicked.connect(self._load_desktop)
+#		btn_load.clicked.connect(self._loadDesktopFile)
 #		gridBox.addWidget(btn_load,9,0,1,1,Qt.Alignment(1))
 #		btn_cancel=QPushButton(_("Cancel"))
 #		btn_cancel.setToolTip(_("Cancel current edit"))
-#		btn_cancel.clicked.connect(self._clear_screen)
+#		btn_cancel.clicked.connect(self._resetScreen)
 #		gridBox.addWidget(btn_cancel,9,1,1,1,Qt.Alignment(0))
 		btn_apply=QPushButton(_("Save"))
 		btn_apply.setToolTip(_("Save desktop"))
 		btn_apply.setIconSize(QSize(48,48))
-		btn_apply.clicked.connect(self._save_desktop)
+		btn_apply.clicked.connect(self._saveDesktopFile)
 		gridBox.addWidget(btn_apply,9,2,1,1,Qt.Alignment(2))
 		gui.setLayout(box)
 		return(gui)
-	#def _render_gui
+	#def _renerGui
 
-	def _clear_screen(self):
+	def _resetScreen(self):
 		self.inp_name.setText("")
 		self.inp_exec.setText("")
 		self.inp_desc.setText("")
 		self.gridBtnBox.clear()
 		self.gridBtnBox.setRowCount(5)
 		self.btn_categories={}
-		self._set_categories()
+		self.setCategories()
 		self.icon='%s/exec.png'%RSRC
 		icn=QtGui.QIcon.fromTheme(self.icon)
 		self.btn_icon.setIcon(icn)
 		self.filename=''
-	#def _clear_screen
+	#def _resetScreen
 
-	def _set_categories(self,loaded_categories=None):
+	def setCategories(self,loaded_categories=None):
 		if not self.categories:
 			self.categories=loaded_categories
 		filter_categories=['debian','help','toys','kidsgames','action','control center','data management',\
@@ -211,19 +205,19 @@ class desktopEditor(QWidget):
 					row+=1
 					col=0
 		self.gridBtnBox.resizeColumnsToContents()
-	#def _set_categories
+	#def setCategories
 		
-	def _load_desktop(self):
-		fdesktop=self._file_chooser(path="/usr/share/applications")
+	def _loadDesktopFile(self):
+		fdesktop=self._fileChooser(path="/usr/share/applications")
 		menu=App2Menu.app2menu()
 		desktop={}
 		if fdesktop:
 			desktop=menu.get_desktop_info(fdesktop)
 		if desktop:
 			if desktop['NoDisplay']:
-				self._show_message(_("Desktops with NoDisplay couldn't be loaded"))
+				self._showMsg(_("Desktops with NoDisplay couldn't be loaded"))
 			else:
-				self._clear_screen()
+				self._resetScreen()
 				self.filename=fdesktop
 				self.inp_name.setText(desktop['Name'])
 				self.inp_exec.setText(desktop['Exec'])
@@ -250,9 +244,9 @@ class desktopEditor(QWidget):
 				else:
 					icn=QtGui.QIcon.fromTheme(desktop['Icon'])
 				self.btn_icon.setIcon(icn)
-	#def _load_desktop
+	#def _loadDesktopFile
 		
-	def _save_desktop(self):
+	def _saveDesktopFile(self):
 		categories=[]
 		desktop={}
 		for btnText,btn in self.btn_categories.items():
@@ -271,14 +265,36 @@ class desktopEditor(QWidget):
 		desktop['Categories']=';'.join(tmp_cat)
 		self._debug("Saving %s"%desktop)
 		self._debug("filename %s"%self.filename)
+		self.filename=desktop['Name']
+		self.filename=self.filename.replace(" ","").lower().replace(".","").replace("-","")
+		self.filename="net.deskedit.{0}.desktop".format(self.filename)
+		self.filepath=os.path.join("/tmp",self.filename)
+		self.writeTmpDesktop(desktop)
 		try:
-			subprocess.check_call(["pkexec","/usr/share/app2menu/app2menu-helper.py",desktop['Name'],desktop['Icon'],desktop['Comment'],desktop['Categories'],desktop['Exec'],self.filename])
-			self._show_message(_("Added %s"%desktop['Name']),"success")
+			#subprocess.check_call(["pkexec","/usr/share/app2menu/app2menu-helper.py",desktop['Name'],desktop['Icon'],desktop['Comment'],desktop['Categories'],desktop['Exec'],self.filename])
+			destdir=os.path.join(os.environ["HOME"],".local","share","applications")
+			if os.path.exists(destdir)==False:
+				os.makedirs(destdir)
+			subprocess.check_call(["desktop-file-install","--vendor=net.deskedit","--dir={}".format(destdir),self.filepath])
 		except:
-			self._show_message(_("Error adding %s"%desktop['Name']))
-	#def _save_desktop
+			self._showMsg(_("Error adding %s"%desktop['Name']))
+		else:
+			self._showMsg(_("Added %s"%desktop['Name']),"success")
+	#def _saveDesktopFile
 
-	def _show_message(self,msg,status=None):
+	def writeTmpDesktop(self,desktop):
+		fname=os.path.basename(self.filename)
+		content=["[Desktop Entry]\n",
+				"Version=1.0\n",
+				"Encoding=UTF-8\n",
+				"Type=Application\n"]
+		for key,value in desktop.items():
+			content.append("{0} = {1}\n".format(key,value))
+		with open(os.path.join("/tmp/",fname),"w") as f:
+			f.writelines(content)
+	#def writeTmpDesktop
+
+	def _showMsg(self,msg,status=None):
 		#self.statusBar.setText(msg)
 		#if status:
 		#	self.statusBar.show(status)
@@ -286,7 +302,7 @@ class desktopEditor(QWidget):
 		#	self.statusBar.show()
 		return
 
-	def _set_css(self):
+	def _setCss(self):
 			css="""
 			#mainWindow{
 				padding:0px;
