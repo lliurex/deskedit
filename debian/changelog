@@ -1,3 +1,10 @@
+deskedit (0.8-0lliurex25) noble; urgency=medium
+
+  * Noble release
+  * Use xdg utils for desktop creation
+
+ -- Juanma1980 <juanma1980@gmail.com>  Fri, 20 Sep 2024 10:24:15 +0200
+
 deskedit (0.7lliurex23) jammy; urgency=medium
 
   * Jammy release
